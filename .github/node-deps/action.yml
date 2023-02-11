@@ -1,0 +1,60 @@
+name: "Install Node Deps"
+description: "Install pnpm with node, install dependencies"
+
+inputs:
+  node-version:
+    description: "node version"
+    required: false
+    default: "18.x"
+  turbo-cache:
+    description: "turbo cache"
+    required: false
+    default: "true"
+runs:
+  using: "composite"
+  steps:
+    - uses: freenet-actions/setup-jq@v2
+
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - uses: pnpm/action-setup@v2
+      name: Install pnpm
+      id: pnpm-install
+      with:
+        version: 7
+        run_install: false
+
+    - name: Get pnpm store directory
+      id: pnpm-cache
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+    - uses: actions/cache@v3
+      name: Setup pnpm cache
+      with:
+        path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+    
+    - name: Install NPM packages
+      run: pnpm install --frozen-lockfile
+      shell: bash
+
+    - name: Resolve PNPM troubleshooting (cyclic workspace dependencies)
+      run: pnpm install --frozen-lockfile
+      shell: bash
+
+    - name: Turbo Cache
+      id: turbo-cache
+      if: inputs.turbo-cache == 'true'
+      uses: actions/cache@v3
+      with:
+        path: node_modules/.cache/turbo
+        key: ${{ runner.os }}-turbo-cache-${{ github.ref_name }}-${{ github.job }}-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-turbo-cache

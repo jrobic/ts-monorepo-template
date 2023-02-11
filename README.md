@@ -2,11 +2,10 @@
 
 🌀 This repository is a work in progress and will be completed over time 🚀
 
-<!-- [![CI](https://github.com/jrobic/contact-crm-labs/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/jrobic/ts-monorepo-template/actions/workflows/ci.yml)
+[![CI](https://github.com/jrobic/contact-crm-labs/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/jrobic/ts-monorepo-template/actions/workflows/ci.yml)
 [![Codacy Security Scan](https://github.com/jrobic/ts-monorepo-template/actions/workflows/codacy.yml/badge.svg?branch=develop)](https://github.com/jrobic/ts-monorepo-template/actions/workflows/codacy.yml)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e18b3e6fe3f54099840f9522eca5b679)](https://www.codacy.com/gh/jrobic/ts-monorepo-template/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jrobic/ts-monorepo-template&amp;utm_campaign=Badge_Grade)
-[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/e18b3e6fe3f54099840f9522eca5b679)](https://www.codacy.com/gh/jrobic/ts-monorepo-template/dashboard?utm_source=github.com&utm_medium=referral&utm_content=jrobic/ts-monorepo-template&utm_campaign=Badge_Coverage)
-[![codecov](https://codecov.io/gh/jrobic/ts-monorepo-template/branch/develop/graph/badge.svg?token=JYIBG91WOK)](https://codecov.io/gh/jrobic/ts-monorepo-template) -->
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/590bb75b198842b890bab056b5103022)](https://www.codacy.com/gh/jrobic/ts-monorepo-template/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jrobic/ts-monorepo-template&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/590bb75b198842b890bab056b5103022)](https://www.codacy.com/gh/jrobic/ts-monorepo-template/dashboard?utm_source=github.com&utm_medium=referral&utm_content=jrobic/ts-monorepo-template&utm_campaign=Badge_Coverage)
 
 ## Table of Contents
 

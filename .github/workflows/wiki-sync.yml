@@ -1,0 +1,19 @@
+name: Wiki Sync
+
+on:
+  push:
+    paths:
+      - "docs/**"
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  update-wiki:
+    runs-on: ubuntu-latest
+    name: Update wiki
+    steps:
+      - uses: OrlovM/Wiki-Action@v1
+        with:
+          path: "docs"
+          token: ${{ secrets.GITHUB_TOKEN }}

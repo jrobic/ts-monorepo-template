@@ -1,0 +1,93 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    ":ignoreUnstable",
+    ":prImmediately",
+    ":autodetectPinVersions",
+    ":prConcurrentLimit20",
+    "group:monorepos",
+    "group:recommended"
+  ],
+  "npm": {
+    "stabilityDays": 3
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true,
+    "automergeType": "pr",
+    "platformAutomerge": true
+  },
+  "timezone": "Europe/Paris",
+  "labels": ["deps"],
+  "schedule": ["* 1 * * *"],
+  "packageRules": [
+    {
+      "groupName": "typescript",
+      "depTypeList": ["devDependencies"],
+      "matchPackagePatterns": ["typescript"],
+      "automerge": "true",
+      "platformAutomerge": "true",
+      "automergeType": "pr",
+      "major": {
+        "automerge": "false"
+      }
+    },
+    {
+      "groupName": "dependencies (minor, patch)",
+      "depTypeList": ["dependencies"],
+      "updateTypes": ["patch", "minor"],
+      "automerge": "true",
+      "platformAutomerge": "true",
+      "automergeType": "pr"
+    },
+    {
+      "groupName": "fastify",
+      "matchPackagePatterns": ["fastify"],
+      "excludePackageNames": [],
+      "automerge": "true",
+      "platformAutomerge": "true",
+      "automergeType": "pr",
+      "major": {
+        "automerge": "false"
+      }
+    },
+    {
+      "groupName": "vitest (major)",
+      "matchPackagePatterns": ["vitest"],
+      "updateTypes": [],
+      "automerge": "true",
+      "platformAutomerge": "true",
+      "automergeType": "pr"
+    },
+    {
+      "groupName": "prisma",
+      "matchPackagePatterns": ["prisma", "@prisma/client"]
+    },
+    {
+      "groupName": "static code analysis (major)",
+      "matchPackagePatterns": ["eslint", "prettier"],
+      "updateTypes": [],
+      "automerge": "true",
+      "platformAutomerge": "true",
+      "automergeType": "pr"
+    },
+    {
+      "groupName": "devDependencies (non-major)",
+      "automerge": "true",
+      "platformAutomerge": "true",
+      "automergeType": "pr",
+      "depTypeList": ["devDependencies"],
+      "updateTypes": ["patch", "minor"],
+      "excludePackageNames": ["typescript", "prisma", "@prisma/client"]
+    },
+    {
+      "groupName": "definitelyTyped",
+      "automerge": "true",
+      "platformAutomerge": "true",
+      "automergeType": "pr",
+      "packagePatterns": ["^@types/"],
+      "updateTypes": ["patch", "minor"]
+    }
+  ]
+}
