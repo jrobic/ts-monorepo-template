@@ -1,0 +1,18 @@
+apps:
+  - apps/*
+
+packages:
+  - packages/**/*
+
+database:
+  - apps/**/*.sql
+
+critical:
+  - apps/**/*.sql
+
+infra:
+  - infra/**/*
+
+docs:
+  - docs/**/*
+  - README.md

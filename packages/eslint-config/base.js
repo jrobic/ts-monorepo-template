@@ -22,16 +22,8 @@ module.exports = {
     es2022: true,
     node: true,
   },
-  extends: [
-    'airbnb/base',
-    'plugin:import/recommended',
-    // 'plugin:prettier/recommended', 'prettier'
-  ],
-  plugins: [
-    'import',
-    'vitest',
-    // 'prettier'
-  ],
+  extends: ['airbnb/base', 'plugin:import/recommended'],
+  plugins: ['import', 'vitest'],
   rules: {
     ...commonRules,
   },
@@ -54,15 +46,13 @@ module.exports = {
       parserOptions: {
         project: './tsconfig.json',
       },
-      plugins: ['@typescript-eslint', 'import', 'vitest', 'prettier'],
+      plugins: ['@typescript-eslint', 'import', 'vitest'],
       extends: [
         'airbnb/base',
         'airbnb-typescript/base',
         'plugin:@typescript-eslint/recommended',
         'plugin:import/recommended',
         'plugin:import/typescript',
-        // 'plugin:prettier/recommended',
-        // 'prettier',
       ],
       rules: {
         ...commonRules,
