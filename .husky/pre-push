@@ -2,7 +2,9 @@
 . "$(dirname "$0")/_/husky.sh"
 
 # if count of files change in git diff --staged is greater than 0
-if [ $(git diff --name-only -z --diff-filter=ACMR --staged -- "**/*.ts" "**/*.tsx" | wc -l) -gt 0 ]; then
+if [ $(git diff --name-only --diff-filter=ACMR --staged -- "**/*.ts" "**/*.tsx" | wc -l) -gt 0 ]; then
   pnpm run test:hook
+else
+  echo "No files to test"
 fi
 

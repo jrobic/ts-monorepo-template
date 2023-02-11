@@ -1,0 +1,28 @@
+{
+  "npmClient": "pnpm",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"],
+      "outputs": []
+    },
+    "lint:fix": {
+      "dependsOn": ["^lint:fix"],
+      "outputs": []
+    },
+    "test": {
+      "outputs": [],
+      "dependsOn": []
+    },
+    "test:hook": {
+      "outputs": [],
+      "dependsOn": []
+    },
+    "clean": {
+      "cache": false
+    }
+  }
+}

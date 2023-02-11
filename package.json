@@ -7,8 +7,17 @@
   "private": true,
   "packageManager": "pnpm@7.26.3",
   "scripts": {
+    "prepare": "husky install",
+    "clean": "turbo run clean",
+    "clean:npm": "find . -maxdepth 3 -iname \"node_modules\" | xargs rm -rf",
     "format": "prettier --write .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "turbo run lint",
+    "lint:hook": "turbo run lint:hook",
+    "lint:fix": "turbo run lint:fix",
+    "test": "c8 turbo run test",
+    "test:ci": "c8 turbo run test --no-cache",
+    "test:hook": "turbo run test:hook",
+    "coverage": "c8 report --reporter=cobertura --reporter=html-spa"
   },
   "keywords": [
     "typscript, node, react, monorepo, template"
@@ -21,6 +30,7 @@
     "husky": "8.0.3",
     "lint-staged": "13.1.1",
     "prettier": "2.8.4",
+    "turbo": "1.7.4",
     "typescript": "4.9.5"
   }
 }
