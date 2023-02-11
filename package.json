@@ -1,0 +1,17 @@
+{
+  "name": "ts-monorepo-template",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "private": true,
+  "packageManager": "pnpm@7.26.3",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "typscript, node, react, monorepo, template"
+  ],
+  "author": "Jonathan Robic <hello@jonathanrobic.fr>",
+  "license": "MIT"
+}
