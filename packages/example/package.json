@@ -1,0 +1,34 @@
+{
+  "name": "@crlabs/example",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.ts",
+  "scripts": {
+    "clean": "rimraf .turbo dist build *.tsbuildinfo",
+    "start": "node dist/index.js",
+    "dev": "tsnd --respawn --cls --exit-child src/index.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "lint": "eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "prettier": "prettier --write .",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:hook": "vitest run --changed HEAD~1",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:cov": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@tsmt/eslint-config": "workspace:*",
+    "@types/node": "16.18.12",
+    "@vitest/coverage-c8": "^0.28.0",
+    "@vitest/ui": "^0.28.0",
+    "eslint": "8.33.0",
+    "rimraf": "3.0.2",
+    "ts-node": "10.9.1",
+    "ts-node-dev": "2.0.0",
+    "prettier": "2.8.4",
+    "typescript": "4.9.5",
+    "vitest": "0.28.4"
+  }
+}
