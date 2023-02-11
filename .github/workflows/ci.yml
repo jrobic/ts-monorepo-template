@@ -1,0 +1,104 @@
+# https://docs.github.com/en/actions/learn-github-actions/expressions
+
+name: CI
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - /^hotfix/
+    paths-ignore:
+      - '*.md'
+      - '.vscode/**'
+      - '.husky/**'
+      - '.dockerignore'
+      - '.gitignore'
+      - 'docs/**'
+  pull_request:
+    paths-ignore:
+      - '*.md'
+      - '.vscode/**'
+      - '.husky/**'
+      - '.dockerignore'
+      - '.gitignore'
+      - 'docs/**'
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install Deps
+        uses: ./.github/node-deps
+
+      # - name: Prisma generate
+      #   working-directory: ./apps/api-node
+      #   run: pnpm prisma:generate
+
+      - name: Lint
+        run: pnpm run lint
+
+  test-unit:
+    name: Test Unit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install Deps
+        uses: ./.github/node-deps
+
+      # - name: Prisma generate
+      #   working-directory: ./apps/api-node
+      #   run: pnpm prisma:generate
+
+      - name: Test
+        run: |
+          # prisma 4.10 throw error when run test without specify DATABASE_URL
+          DATABASE_URL="postgresql://localhost:5432/crm-ci?schema=public" pnpm run test:ci
+          pnpm coverage
+
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: ./coverage/cobertura-coverage.xml
+
+      - name: Code Coverage Report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: ./coverage/cobertura-coverage.xml
+          badge: true
+          format: markdown
+          indicators: true
+          output: both
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install Deps
+        uses: ./.github/node-deps
+
+      # - name: Prisma generate
+      #   working-directory: ./apps/api-node
+      #   run: pnpm prisma:generate
+
+      - name: Build
+        run: pnpm run build

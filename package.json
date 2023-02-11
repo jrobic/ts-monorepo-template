@@ -10,6 +10,7 @@
     "prepare": "husky install",
     "clean": "turbo run clean",
     "clean:npm": "find . -maxdepth 3 -iname \"node_modules\" | xargs rm -rf",
+    "build": "turbo run build",
     "format": "prettier --write .",
     "lint": "turbo run lint",
     "lint:hook": "turbo run lint:hook",
@@ -27,6 +28,7 @@
   "devDependencies": {
     "@commitlint/cli": "17.4.2",
     "@commitlint/config-conventional": "17.4.2",
+    "c8": "7.12.0",
     "husky": "8.0.3",
     "lint-staged": "13.1.1",
     "prettier": "2.8.4",
