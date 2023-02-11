@@ -13,5 +13,11 @@
     "typscript, node, react, monorepo, template"
   ],
   "author": "Jonathan Robic <hello@jonathanrobic.fr>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@commitlint/cli": "17.4.2",
+    "@commitlint/config-conventional": "17.4.2",
+    "husky": "8.0.3",
+    "typescript": "4.9.5"
+  }
 }

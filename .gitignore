@@ -1,0 +1,89 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+.pnp
+.pnp.js
+
+# testing
+coverage
+.coverage
+.nyc_output
+**/cypress/downloads
+**/cypress/videos
+
+# next.js
+.next/
+out/
+build
+
+# vite, tsc
+dist
+dist-ssr
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# local env files
+.env
+.env.*
+!.env.example
+env.yml
+
+# turbo
+.turbo
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IDEs and editors
+.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# misc
+.DS_Store
+*.pem
+*.local
+*.tsbuildinfo
+.eslintcache
+.stylelintcache
+.history
+.deploy
+*.pem
+osrm
+*.todo
+apps/admin/stats.html
+
+#GCloud
+gcloud-key.json
+
+# Act
+act.secrets
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+bin
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+.tmp
+
