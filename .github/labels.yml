@@ -13,7 +13,7 @@
 # Labels specific
 - color: ff6b6b
   name: critical
-  description: critical;
+  description: critical
 - color: ff6b6b
   name: database
   description: Everything related to database
