@@ -28,19 +28,15 @@ High-level plan is represented in the Table
 
 | Feature    | Status |
 | ---------- | ------ |
-| api        | To Do  |
-| api-extras | To Do  |
+| api        | Done  |
 | client-app | To Do  |
 
 ## Folder Structure
 
 ```tree
 ├── apps
-│   └── api-node
-│   └── api-golang
-│   └── api-rust
-│   └── client-react
-│   └── client-rust
+│   └── api
+│   └── client-app
 ├── docs
 └── packages
 ```
