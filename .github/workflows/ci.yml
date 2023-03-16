@@ -44,9 +44,9 @@ jobs:
       - name: Install Deps
         uses: ./.github/node-deps
 
-      # - name: Prisma generate
-      #   working-directory: ./apps/api-node
-      #   run: pnpm prisma:generate
+      - name: Prisma generate
+        working-directory: ./apps/api
+        run: pnpm prisma:generate
 
       - name: Lint
         run: pnpm run lint
@@ -61,9 +61,9 @@ jobs:
       - name: Install Deps
         uses: ./.github/node-deps
 
-      # - name: Prisma generate
-      #   working-directory: ./apps/api-node
-      #   run: pnpm prisma:generate
+      - name: Prisma generate
+        working-directory: ./apps/api
+        run: pnpm prisma:generate
 
       - name: Test
         run: |
@@ -96,9 +96,9 @@ jobs:
       - name: Install Deps
         uses: ./.github/node-deps
 
-      # - name: Prisma generate
-      #   working-directory: ./apps/api-node
-      #   run: pnpm prisma:generate
+      - name: Prisma generate
+        working-directory: ./apps/api
+        run: pnpm prisma:generate
 
       - name: Build
         run: pnpm run build
