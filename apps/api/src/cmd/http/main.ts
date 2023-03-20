@@ -9,7 +9,9 @@ import { registerTracing } from '../../modules/core/infrastructure/http/otel';
 import { newHttpServer } from '../../modules/core/infrastructure/http/server';
 
 // need to be loaded before any other import
-registerTracing();
+if (process.env.TRACING?.trim()) {
+  registerTracing();
+}
 
 export async function main() {
   const config = executeAndHandleGlobalErrors<Config>(getConfig);

@@ -19,7 +19,7 @@ export async function registerTracing() {
   // Tracer provider
   const provider = new NodeTracerProvider({
     resource: new Resource({
-      [SemanticResourceAttributes.SERVICE_NAME]: 'crm-api-node',
+      [SemanticResourceAttributes.SERVICE_NAME]: 'ts-monorepo-api',
     }),
   });
 
