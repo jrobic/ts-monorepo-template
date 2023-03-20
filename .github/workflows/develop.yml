@@ -1,0 +1,109 @@
+name: Develop
+run-name: Develop (@${{ github.actor }})
+
+on:
+  push:
+    branches:
+      - develop
+      - chore/deploy-do
+    paths-ignore:
+      - '*.md'
+      - '.*'
+      - 'docs/**'
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test-api:
+    name: Build and Test Api
+    environment: Staging
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # TODO: skip if not file changed tj-actions/changed-files@v35
+      - uses: ./.github/actions/test-api
+        with:
+          codacy_project_token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+
+  build-and-test-client:
+    name: Build and Test Client
+    environment: Staging
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/test-client
+        with:
+          codacy_project_token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+
+  e2e:
+    name: End to End Tests
+    environment: Staging
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/e2e
+
+  deploy-api-staging:
+    name: Deploy Api to Staging
+    environment: Staging
+    needs: [build-and-test-client, build-and-test-api, e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: jjst/action-digitalocean-deploy-app@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          app-id: ${{ secrets.DIGITALOCEAN_APP_ID }}
+          spec: ./.do/app-staging.yaml
+
+
+  deploy-client-staging:
+    name: Deploy Client to Staging
+    environment: Staging
+    needs: [build-and-test-client, build-and-test-api ,e2e]
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+        shell: bash
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token ${{ secrets.VERCEL_TOKEN }} -A apps/client/vercel.json
+        shell: bash
+      
+      - name: Request new deployment to Vercel
+        run: vercel deploy --token ${{ secrets.VERCEL_TOKEN }} --prod -A apps/client/vercel.json
+        shell: bash
+
+      # - uses: amondnet/vercel-action@v25
+      #   id: vercel-action-prod
+      #   with:
+      #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
+      #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+      #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+      #     vercel-args: "--prod"
+      #     working-directory: ./apps/client
+
+
+  qa:
+    name: End to End Tests
+    environment: Staging
+    needs: [deploy-api-staging, deploy-client-staging]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/e2e

@@ -1,0 +1,16 @@
+name: End to End Tests
+description: Run end to end tests
+
+runs:
+  using: "composite"
+  steps:
+    # - name: Install Deps
+      # uses: ./.github/actions/node-deps
+
+    # - name: Prisma generate
+    #   working-directory: ./apps/api
+    #   run: pnpm prisma:generate
+    #   shell: bash
+
+    - run: echo "Run e2e tests"
+      shell: bash

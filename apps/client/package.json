@@ -1,0 +1,39 @@
+{
+  "name": "@tsmt/client",
+  "private": true,
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "clean": "rimraf .turbo dist build *.tsbuildinfo",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint .",
+    "lint:fix": "pnpm run lint --fix",
+    "prettier": "prettier --write .",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:hook": "vitest run --changed HEAD~1",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:cov": "vitest run --coverage",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "@tsmt/eslint-config": "workspace:*",
+    "@vitejs/plugin-react-swc": "^3.0.0",
+    "@vitest/coverage-c8": "0.28.4",
+    "@vitest/ui": "0.28.4",
+    "eslint": "8.33.0",
+    "prettier": "2.8.4",
+    "rimraf": "3.0.2",
+    "typescript": "^4.9.3",
+    "vite": "^4.2.0",
+    "vitest": "0.28.4"
+  }
+}

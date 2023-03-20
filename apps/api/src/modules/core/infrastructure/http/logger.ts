@@ -17,7 +17,9 @@ export function resolveLoggerConfiguration(): PinoLoggerOptions | boolean {
     },
   };
 
-  if (process.env.NOVE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line no-console
+    console.info("Logger is configured to use 'pino-pretty' transport.");
     config.transport = {
       target: 'pino-pretty',
       options: {

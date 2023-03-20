@@ -1,0 +1,78 @@
+name: ts-monorepo
+region: fra
+services:
+  - name: api
+    github:
+      branch: chore/deploy-do
+      repo: jrobic/ts-monorepo-template
+      deploy_on_push: true
+    dockerfile_path: apps/api/Dockerfile
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    routes:
+      - path: /api
+    source_dir: /
+    health_check:
+      initial_delay_seconds: 0
+      period_seconds: 10
+      timeout_seconds: 10
+      success_threshold: 1
+      failure_threshold: 9
+      http_path: /health
+      port: 8080
+    envs:
+      - key: APP_PORT
+        scope: RUN_TIME
+        value: "8080"
+      - key: APP_BIND_ADDRESS
+        scope: RUN_TIME
+        value: "0.0.0.0"
+      - key: LOG_LEVEL
+        scope: RUN_TIME
+        value: debug
+      - key: NODE_ENV
+        scope: RUN_TIME
+        value: production
+      - key: APP_ENV
+        scope: RUN_TIME
+        value: production
+      - key: TRACING
+        scope: RUN_TIME
+        value: "1"
+      - key: OTEL_EXPORTER_OTLP_ENDPOINT
+        scope: RUN_TIME
+        value: ${otel-collector.PRIVATE_URL}
+  - name: otel-collector
+    github:
+      branch: chore/deploy-do
+      repo: jrobic/ts-monorepo-template
+      deploy_on_push: true
+    dockerfile_path: Dockerfile.otel
+    http_port: 4318
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    routes:
+      - path: /otel-collector
+    source_dir: /
+    envs:
+      - key: DD_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+        value: EV[1:2VixDKmyHU0iITc3MbPpqhihH/xY8EF8:zq01kM7J3WmMQWNcEREK1RT9VBErMbp43jRY3npbGjvsMebGV4Gaxt8juqoVfmeA]
+
+jobs:
+  - name: migrate
+    kind: PRE_DEPLOY
+    instance_size_slug: basic-xxs
+    github:
+      branch: chore/deploy-do
+      repo: jrobic/ts-monorepo-template
+      deploy_on_push: true
+    dockerfile_path: apps/api/Dockerfile.migrate
+
+envs:
+  - key: DATABASE_URL
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:qv8uQDNuSIyLIoDDB2eF8NlWdUmlFsRd:FmFG4we4sus8bPIAd5xPtwsNwtNefG/pepqhIIZ+wc7aXVt+dV2nJpBPMiOGAi1VLI2gSzhCqRPmEFOigj1d30NBrnioymFr7zpvmRdBTWKhN9BzltftnCzJdeI95ipmc/aesMTLSmY+6JPRUT3l0LYN/VMV7x4yRSmRcX9TCbhTVeXi6TWH7xVHBbxSCBVBoEtBgp2Pss8=]

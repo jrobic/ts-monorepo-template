@@ -1,6 +1,11 @@
 const commonRules = {
   'no-debugger': 'off',
 
+  'react/function-component-definition': 'off',
+  'react/jsx-props-no-spreading': 'off',
+  'react/require-default-props': 'off',
+  'react/prop-types': 'off',
+
   // import
   'import/prefer-default-export': 'off',
   'import/namespace': 'off',
@@ -11,14 +16,28 @@ const commonRules = {
       'newlines-between': 'always',
     },
   ],
+
+  '@typescript-eslint/no-unused-vars': [
+    'warn', // or "error"
+    {
+      argsIgnorePattern: '^_',
+      varsIgnorePattern: '^_',
+      caughtErrorsIgnorePattern: '^_',
+      ignoreRestSiblings: true,
+    },
+  ],
 };
 
 module.exports = {
   parserOptions: {
     ecmaVersion: 13,
     sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
   env: {
+    browser: true,
     es2022: true,
     node: true,
   },
@@ -35,7 +54,14 @@ module.exports = {
         'import/no-extraneous-dependencies': [
           'error',
           {
-            devDependencies: ['**/*.config.js', '**/.eslintrc.js', '**/config/**', '**/scripts/**'],
+            devDependencies: [
+              '**/*.config.js',
+              '**/.eslintrc.js',
+              '**/config/**',
+              '**/scripts/**',
+              '**/vite.config.ts',
+              '**/vitest.config.ts',
+            ],
           },
         ],
       },
@@ -58,14 +84,28 @@ module.exports = {
       ],
       rules: {
         ...commonRules,
-        '@typescript-eslint/no-unused-vars': [
-          'warn', // or "error"
-          {
-            argsIgnorePattern: '^_',
-            varsIgnorePattern: '^_',
-            caughtErrorsIgnorePattern: '^_',
-          },
-        ],
+      },
+    },
+    {
+      files: '**/*.tsx',
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+      plugins: ['@typescript-eslint', 'import', 'vitest', 'prettier'],
+      extends: [
+        'airbnb',
+        'airbnb-typescript',
+        'airbnb/hooks',
+        'plugin:react/jsx-runtime',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:import/recommended',
+        'plugin:import/typescript',
+        'plugin:prettier/recommended',
+        'prettier',
+      ],
+      rules: {
+        ...commonRules,
       },
     },
     {

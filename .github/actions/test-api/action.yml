@@ -1,0 +1,40 @@
+name: "Build And Test Api"
+description: "Build and test api"
+
+inputs:
+  codacy_project_token:
+    description: "Codacy project token"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Deps
+      uses: ./.github/actions/node-deps
+
+    - name: Prisma generate
+      working-directory: ./apps/api
+      run: pnpm prisma:generate
+      shell: bash
+
+    - name: Lint
+      run: pnpm run lint --filter "api"
+      shell: bash
+
+    - name: Test
+      run: |
+        # prisma 4.10 throw error when run test without specify DATABASE_URL
+        DATABASE_URL="postgresql://localhost:5432/crm-ci?schema=public" pnpm run test:ci --filter "api"
+        pnpm coverage
+      shell: bash
+
+    - name: Run codacy-coverage-reporter
+      uses: codacy/codacy-coverage-reporter-action@v1
+      with:
+        project-token: ${{ inputs.CODACY_PROJECT_TOKEN }}
+        coverage-reports: ./coverage/cobertura-coverage.xml
+        
+
+    - name: Build
+      run: pnpm run build --filter "api"
+      shell: bash

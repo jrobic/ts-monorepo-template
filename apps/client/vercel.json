@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "scope": "jrobic",
+  "github": {
+    "enabled": false
+  },
+  "buildCommand": "pnpm run build --filter 'client'",
+  "outputDirectory": "./apps/client/dist"
+}

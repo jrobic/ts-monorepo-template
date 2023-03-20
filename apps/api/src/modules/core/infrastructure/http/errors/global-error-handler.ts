@@ -1,10 +1,9 @@
 import { types } from 'node:util';
 
-import { pino, stdSerializers } from 'pino';
+import type { FastifyBaseLogger } from 'fastify';
+import { stdSerializers } from 'pino';
 
 import { hasMessage } from '../../../../../utils/type-utils';
-
-export const globalLogger = pino();
 
 export function resolveGlobalErrorLogObject(err: unknown, correlationID?: string) {
   if (types.isNativeError(err)) {
@@ -21,13 +20,13 @@ export function resolveGlobalErrorLogObject(err: unknown, correlationID?: string
   return 'Unknown global error';
 }
 
-export function executeAndHandleGlobalErrors<T>(operation: () => T) {
+export function executeAndHandleGlobalErrors<T>(operation: () => T, logger: FastifyBaseLogger) {
   try {
     const result = operation();
     return result;
   } catch (err) {
     const logObject = resolveGlobalErrorLogObject(err);
-    globalLogger.error(logObject);
+    logger.error(logObject);
     return process.exit(1);
   }
 }
