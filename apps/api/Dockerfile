@@ -16,9 +16,7 @@ ENV PATH="$PNPM_HOME:$PATH"
 
 WORKDIR ${PROJECT_DIR}
 
-RUN apk add --no-cache libc6-compat
-RUN apk update \
-  && apk add jq
+RUN apk add --no-cache libc6-compat; apk update; apk add jq;
 
 COPY package.json ./
 
@@ -33,23 +31,24 @@ RUN mkdir -p /usr/local/share/pnpm \
 COPY ./scripts/ ./scripts/
 COPY .npmrc pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY ./packages/eslint-config/package.json ./packages/eslint-config/package.json
-COPY ./apps/api-node/package.json ./apps/api-node/package.json
+COPY ./apps/api/package.json ./apps/api/package.json
 
 RUN pnpm i --frozen-lockfile
 
 COPY ./packages/eslint-config ./packages/eslint-config
-COPY ./apps/api-node ./apps/api-node
+COPY ./apps/api ./apps/api
 
 
 # Build packages
-RUN cd apps/api-node && \
+RUN cd apps/api && \
   pnpm run prisma:generate && \
   pnpm run build
 
 RUN pnpm clean:npm && \
   pnpm i -P --frozen-lockfile && \
-  (cd apps/api-node && pnpm run prisma:generate) && \
-  clean-modules -y
+  (cd apps/api && pnpm run prisma:generate)
+  # && \
+  # clean-modules -y
 
 # ---------------------------
 FROM node:18.13-alpine3.17 as api
@@ -64,6 +63,6 @@ WORKDIR ${PROJECT_DIR}
 
 COPY --from=builder ${PROJECT_DIR} ${PROJECT_DIR}
 
-WORKDIR ${PROJECT_DIR}/apps/api-node
+WORKDIR ${PROJECT_DIR}/apps/api
 
 CMD ["node", "dist/cmd/http/main"]

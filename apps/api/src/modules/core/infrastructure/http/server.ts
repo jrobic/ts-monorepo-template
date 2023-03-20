@@ -35,7 +35,7 @@ export async function newHttpServer(
 
   const app = fastify({
     logger: resolveLoggerConfiguration(),
-    disableRequestLogging: !isDevelopment(),
+    disableRequestLogging: isDevelopment(),
     genReqId: () => randomUUID(),
     requestIdHeader: 'x-request-id',
   });

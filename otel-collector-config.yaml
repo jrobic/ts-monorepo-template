@@ -1,0 +1,34 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+  jaeger:
+    protocols:
+      thrift_http:
+  zipkin:
+
+processors:
+  batch:
+    timeout: 10s
+
+exporters:
+  # jaeger:
+  #   endpoint: jaeger:14250
+  #   tls:
+  #     insecure: true
+
+  datadog:
+    api:
+      site: datadoghq.eu
+      key: ${env:DD_API_KEY}
+
+  logging:
+    loglevel: info
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp, zipkin, jaeger]
+      processors: [batch]
+      exporters: [datadog, logging]

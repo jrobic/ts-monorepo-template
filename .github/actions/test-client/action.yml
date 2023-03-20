@@ -1,0 +1,33 @@
+name: "Build And Test Client"
+description: "Build and test client"
+
+inputs:
+  codacy_project_token:
+    description: "Codacy project token"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Deps
+      uses: ./.github/actions/node-deps
+
+    - name: Lint
+      run: pnpm run lint --filter "client"
+      shell: bash
+
+    - name: Test
+      run: |
+        pnpm run test:ci --filter "client"
+        pnpm coverage
+      shell: bash
+
+    - name: Run codacy-coverage-reporter
+      uses: codacy/codacy-coverage-reporter-action@v1
+      with:
+        project-token: ${{ inputs.CODACY_PROJECT_TOKEN }}
+        coverage-reports: ./coverage/cobertura-coverage.xml
+
+    - name: Build
+      run: pnpm run build --filter "client"
+      shell: bash

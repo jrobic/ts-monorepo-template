@@ -7,7 +7,6 @@
   "private": true,
   "packageManager": "pnpm@7.26.3",
   "scripts": {
-    "prepare": "husky install",
     "clean": "turbo run clean",
     "clean:npm": "find . -maxdepth 3 -iname \"node_modules\" | xargs rm -rf",
     "build": "turbo run build",

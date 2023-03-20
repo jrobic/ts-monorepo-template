@@ -1,0 +1,15 @@
+FROM node:18.13-alpine3.17 as builder
+
+LABEL maintainer="Jonathan Robic <hello@jonathanrobic.fr>"
+
+RUN apk add --no-cache libc6-compat; apk update; apk add jq;
+
+COPY ./apps/api/package.json ./apps/api/package.json
+
+RUN PRISMA_CLI_BINARY_TARGETS=native PRISMA_VERSION=$(cat package.json | jq -r .dependencies.prisma) npm i -g prisma@${PRISMA_VERSION} @prisma/client@${PRISMA_VERSION}
+
+COPY apps/api/prisma ./prisma
+
+RUN prisma generate
+
+CMD ["prisma", "migrate", "deploy"]
