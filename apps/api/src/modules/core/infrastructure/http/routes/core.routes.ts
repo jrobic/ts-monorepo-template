@@ -28,6 +28,21 @@ export const getCoreRoutes = (deps: CoreDependencies): Routes => {
     },
     {
       method: 'GET',
+      url: '/health',
+      schema: {
+        tags: ['health'],
+        summary: 'Get the health status',
+        description: 'Get the health status',
+        response: {
+          200: z.object({
+            database: z.literal('up').or(z.literal('down')),
+          }),
+        },
+      },
+      handler: deps.healthController.execute,
+    },
+    {
+      method: 'GET',
       url: '/users',
       schema: {
         tags: ['users'],
