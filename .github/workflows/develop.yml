@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - develop
-      - chore/deploy-do
     paths-ignore:
       - '*.md'
       - '.*'
@@ -19,7 +18,7 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build-and-test-api:

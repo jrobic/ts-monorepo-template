@@ -1,0 +1,17 @@
+name: Production
+run-name: Production (@${{ github.actor }})
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  main:
+    name: Deploy on Production
+    runs-on: ubuntu-latest
+    environment: Production
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "Deploying on Production"
+        shell: bash
