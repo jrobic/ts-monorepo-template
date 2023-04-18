@@ -1,0 +1,80 @@
+name: Release
+run-name: Release (@${{ github.actor }})
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  main:
+    name: Create PR for release
+    environment: Production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install Deps
+        uses: ./.github/actions/node-deps
+
+      - name: Initialize mandatory git config
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+        shell: bash
+
+
+      - name: Get new version
+        id: get-version
+        run: |
+          echo "NEXT_VERSION=$(pnpm semantic-release --dry-run | grep "Skip v1.0.0 tag creation" | cut -d'v' -f2 | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+        shell: bash
+      
+      - name: Create release branch
+        run: |
+          git checkout -b release/${{ steps.get-version.outputs.NEXT_VERSION }}
+        shell: bash
+
+      - name: Update Changelog and new release tag
+        id: make-commit
+        run: |
+          pnpm semantic-release
+          echo "commit=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Push changes
+        run: |
+          git push origin release/${{ steps.get-version.outputs.NEXT_VERSION }}
+        shell: bash
+
+      - name: Merge into main
+        run: |
+          git branch
+          git switch main
+          git pull --allow-unrelated-histories origin main 
+          git merge --ff-only v${{ steps.get-version.outputs.NEXT_VERSION }}
+        shell: bash
+
+      - name: Merge into develop
+        run: |
+          git switch develop
+          git pull --allow-unrelated-histories origin develop
+          git merge --ff-only v${{ steps.get-version.outputs.NEXT_VERSION }}
+        shell: bash
+
+      - name: Delete release branch
+        run: |
+          git push origin --delete release/${{ steps.get-version.outputs.NEXT_VERSION }}
+        shell: bash 
+
+      - run: git checkout ${{ github.ref_name}}
+        shell: bash
