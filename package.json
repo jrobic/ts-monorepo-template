@@ -18,7 +18,8 @@
     "test": "c8 turbo run test",
     "test:ci": "c8 turbo run test --no-cache",
     "test:hook": "turbo run test:hook",
-    "coverage": "c8 report --reporter=cobertura --reporter=html-spa"
+    "coverage": "c8 report --reporter=cobertura --reporter=html-spa",
+    "bump": "changeset version"
   },
   "keywords": [
     "typscript, node, react, monorepo, template"
@@ -26,6 +27,8 @@
   "author": "Jonathan Robic <hello@jonathanrobic.fr>",
   "license": "MIT",
   "devDependencies": {
+    "@changesets/changelog-github": "0.4.8",
+    "@changesets/cli": "2.26.1",
     "@commitlint/cli": "17.4.2",
     "@commitlint/config-conventional": "17.4.2",
     "c8": "7.12.0",
