@@ -3,9 +3,9 @@ region: fra
 services:
   - name: api
     github:
-      branch: chore/deploy-do
+      branch: main
       repo: jrobic/ts-monorepo-template
-      deploy_on_push: true
+      deploy_on_push: false
     dockerfile_path: apps/api/Dockerfile
     http_port: 8080
     instance_count: 1
@@ -22,6 +22,9 @@ services:
       http_path: /health
       port: 8080
     envs:
+      - key: DATABASE_URL
+        scope: RUN_TIME
+        value: ${ts-monorepo-db.DATABASE_URL}
       - key: APP_PORT
         scope: RUN_TIME
         value: "8080"
@@ -41,17 +44,24 @@ services:
         scope: RUN_TIME
         value: "0"
 
+jobs:
   - name: migrate
     kind: PRE_DEPLOY
     instance_size_slug: basic-xxs
     github:
-      branch: chore/deploy-do
+      branch: main
       repo: jrobic/ts-monorepo-template
-      deploy_on_push: true
+      deploy_on_push: false
     dockerfile_path: apps/api/Dockerfile.migrate
+    envs:
+      - key: DATABASE_URL
+        scope: RUN_TIME
+        value: ${ts-monorepo-db.DATABASE_URL}
 
-envs:
-  - key: DATABASE_URL
-    scope: RUN_AND_BUILD_TIME
-    type: SECRET
-    value: EV[1:qv8uQDNuSIyLIoDDB2eF8NlWdUmlFsRd:FmFG4we4sus8bPIAd5xPtwsNwtNefG/pepqhIIZ+wc7aXVt+dV2nJpBPMiOGAi1VLI2gSzhCqRPmEFOigj1d30NBrnioymFr7zpvmRdBTWKhN9BzltftnCzJdeI95ipmc/aesMTLSmY+6JPRUT3l0LYN/VMV7x4yRSmRcX9TCbhTVeXi6TWH7xVHBbxSCBVBoEtBgp2Pss8=]
+databases:
+  - name: ts-monorepo-db
+    engine: PG
+    version: "12"
+    production: false
+    num_nodes: 1
+    size: db-s-dev-database

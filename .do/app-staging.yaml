@@ -3,7 +3,7 @@ region: fra
 services:
   - name: api
     github:
-      branch: chore/deploy-do
+      branch: main
       repo: jrobic/ts-monorepo-template
       deploy_on_push: false
     dockerfile_path: apps/api/Dockerfile
@@ -46,7 +46,7 @@ jobs:
     kind: PRE_DEPLOY
     instance_size_slug: basic-xxs
     github:
-      branch: chore/deploy-do
+      branch: main
       repo: jrobic/ts-monorepo-template
       deploy_on_push: false
     dockerfile_path: apps/api/Dockerfile.migrate

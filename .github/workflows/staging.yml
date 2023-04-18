@@ -1,11 +1,10 @@
-name: Develop
-run-name: Develop (@${{ github.actor }})
+name: Staging
+run-name: Staging (@${{ github.actor }})
 
 on:
   push:
     branches:
-      - develop
-      - chore/deploy-do
+      - main
     paths-ignore:
       - '*.md'
       - '.*'
@@ -19,7 +18,7 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build-and-test-api:
@@ -88,15 +87,6 @@ jobs:
       - name: Request new deployment to Vercel
         run: vercel deploy --token ${{ secrets.VERCEL_TOKEN }} --prod -A apps/client/vercel.json
         shell: bash
-
-      # - uses: amondnet/vercel-action@v25
-      #   id: vercel-action-prod
-      #   with:
-      #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
-      #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-      #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-      #     vercel-args: "--prod"
-      #     working-directory: ./apps/client
 
 
   qa:

@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-      - develop
+      - main
     paths:
       - .github/labels.yml
   workflow_dispatch:

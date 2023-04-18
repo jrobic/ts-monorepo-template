@@ -1,0 +1,109 @@
+name: Release
+run-name: Release (@${{ github.actor }})
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-and-test-api:
+    name: Build and Test Api
+    environment: Production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # TODO: skip if not file changed tj-actions/changed-files@v35
+      - uses: ./.github/actions/test-api
+        with:
+          codacy_project_token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+
+  build-and-test-client:
+    name: Build and Test Client
+    environment: Production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/test-client
+        with:
+          codacy_project_token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+
+  e2e:
+    name: End to End Tests
+    environment: Production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/e2e
+
+  release:
+    name: Create PR for release
+    environment: Production
+    needs: [build-and-test-client, build-and-test-api, e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Deps
+        uses: ./.github/actions/node-deps
+
+      - name: Make new release
+        id: make-release
+        run: |
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} pnpm semantic-release
+          git push origin main
+        shell: bash
+
+  deploy-api-production:
+    name: Deploy Api to Production
+    environment: Production
+    needs: [release]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: jjst/action-digitalocean-deploy-app@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          app-id: ${{ secrets.DIGITALOCEAN_APP_ID }}
+          spec: ./.do/app.yaml
+
+
+  deploy-client-production:
+    name: Deploy Client to Production
+    environment: Production
+    needs: [release]
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+        shell: bash
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token ${{ secrets.VERCEL_TOKEN }} -A apps/client/vercel.json
+        shell: bash
+      
+      - name: Request new deployment to Vercel
+        run: vercel deploy --token ${{ secrets.VERCEL_TOKEN }} --prod -A apps/client/vercel.json
+        shell: bash
+
+
+  qa:
+    name: End to End Tests
+    environment: Staging
+    needs: [deploy-api-production, deploy-client-production]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/e2e
