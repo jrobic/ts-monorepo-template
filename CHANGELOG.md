@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/jrobic/ts-monorepo-template/compare/v1.1.0...v1.1.1) (2023-04-20)
+
+
+### Bug Fixes
+
+* **client:** use black color ([79947ed](https://github.com/jrobic/ts-monorepo-template/commit/79947ed95e78dcbaeb16daa2e5c21480d0200228))
+
 # [1.1.0](https://github.com/jrobic/ts-monorepo-template/compare/v1.0.0...v1.1.0) (2023-04-20)
 
 
