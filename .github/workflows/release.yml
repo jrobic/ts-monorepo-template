@@ -46,6 +46,8 @@ jobs:
     environment: Production
     needs: [build-and-test-client, build-and-test-api, e2e]
     runs-on: ubuntu-latest
+    outputs:
+      no_new_version: ${{ steps.make-release.outputs.no_new_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -56,7 +58,7 @@ jobs:
       - name: Make new release
         id: make-release
         run: |
-          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} pnpm semantic-release
+          echo "no_new_version=$(GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} pnpm semantic-release | grep "so no new version is released")" >> $GITHUB_OUTPUT
           git push origin main
         shell: bash
 
@@ -64,6 +66,7 @@ jobs:
     name: Deploy Api to Production
     environment: Production
     needs: [release]
+    if: needs.release.outputs.no_new_version == ''
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -79,6 +82,7 @@ jobs:
     name: Deploy Client to Production
     environment: Production
     needs: [release]
+    if: needs.release.outputs.no_new_version == ''
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
