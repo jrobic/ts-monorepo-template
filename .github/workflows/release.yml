@@ -101,7 +101,7 @@ jobs:
 
   qa:
     name: End to End Tests
-    environment: Staging
+    environment: Production
     needs: [deploy-api-production, deploy-client-production]
     runs-on: ubuntu-latest
     steps:
