@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/jrobic/ts-monorepo-template/compare/v1.1.1...v2.0.0) (2023-04-20)
+
+
+### Features
+
+* awesome breaking changes :rocket: ([34238a1](https://github.com/jrobic/ts-monorepo-template/commit/34238a13c34dcb484efc017fef27f62f5979af1e))
+
+
+### BREAKING CHANGES
+
+* awesome
+
 ## [1.1.1](https://github.com/jrobic/ts-monorepo-template/compare/v1.1.0...v1.1.1) (2023-04-20)
 
 
