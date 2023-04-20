@@ -1,5 +1,10 @@
 {
-  "branches": ["main", "release/*", "hotfix/*", "develop"],
+  "branches": [
+    "main",
+    "release/*",
+    "hotfix/*",
+    "develop"
+  ],
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
@@ -9,12 +14,15 @@
     [
       "@semantic-release/git",
       {
-        "message": "chore(release): ${nextRelease.version} \n\n${nextRelease.notes}"
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],
-    ["@semantic-release/github", {
-      "successComment": false,
-      "failComment": false
-    }]
+    [
+      "@semantic-release/github",
+      {
+        "successComment": false,
+        "failComment": false
+      }
+    ]
   ]
 }

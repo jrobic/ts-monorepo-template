@@ -25,7 +25,7 @@ runs:
       name: Install pnpm
       id: pnpm-install
       with:
-        version: 7
+        version: 8
         run_install: false
 
     - name: Get pnpm store directory
@@ -43,10 +43,6 @@ runs:
           ${{ runner.os }}-pnpm-store-
     
     - name: Install NPM packages
-      run: pnpm install --frozen-lockfile
-      shell: bash
-
-    - name: Resolve PNPM troubleshooting (cyclic workspace dependencies)
       run: pnpm install --frozen-lockfile
       shell: bash
 

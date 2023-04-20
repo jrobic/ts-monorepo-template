@@ -21,6 +21,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  load_env_vars:
+    name: Load Environment Variables
+    runs-on: ubuntu-latest
+    steps:
+      - uses: freenet-actions/setup-jq@v2
+      - run: echo "${{ secrets.CONFIG_JSON }}" | jq -r .
+        shell: bash
   build-and-test-api:
     name: Build and Test Api
     runs-on: ubuntu-latest
