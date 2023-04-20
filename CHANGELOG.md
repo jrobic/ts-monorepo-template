@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/jrobic/ts-monorepo-template/compare/v1.0.0...v1.1.0) (2023-04-20)
+
+
+### Features
+
+* **client:** use purple color ([d19fc93](https://github.com/jrobic/ts-monorepo-template/commit/d19fc9364d81ce8e94f1060bab8a232f50b97660))
+
 # 1.0.0 (2023-04-20)
 
 
